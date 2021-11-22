@@ -1,0 +1,9 @@
+@import 'variables';
+
+.MuiModal-root, .MuiBackdrop-root, .MuiPaper-root {
+    top: $header-height!important;
+}
+
+main {
+    padding: 20px;
+}

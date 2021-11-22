@@ -1,0 +1,9 @@
+$dark: #333;
+
+$header-height: 70px;
+
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

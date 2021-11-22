@@ -1,0 +1,42 @@
+@import '../../variables';
+header {
+    height: $header-height;
+    border-bottom: 1px solid $dark;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    > .menu-button {
+        background-color: transparent;
+        height: 50px;
+        width: 50px;
+        padding: 0;
+        position: relative;
+        border: unset;
+        cursor: pointer;
+        @include flex-center;
+        > div {
+            background-color: $dark;
+            width: 35px;
+            height: 7px;
+            position: absolute;
+            transition: all .3s ease;
+        }
+        > div:nth-child(1) {
+            transform: translateY(-14px);
+        }
+        > div:nth-child(3) {
+            transform: translateY(14px);
+        }
+        &.open {
+            > div:nth-child(1) {
+                transform: rotate(45deg);
+            }
+            > div:nth-child(2) {
+                opacity: 0;
+            }
+            > div:nth-child(3) {
+                transform: rotate(-45deg);
+            }
+        }
+    }
+}

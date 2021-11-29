@@ -1,4 +1,4 @@
-import { Drawer } from "@mui/material";
+import { Button, Drawer } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router";
 import Header from "../../containers/Header/Header";
@@ -13,6 +13,7 @@ const Admin = () => {
     const toggleDrawer = (isOpen) => {
         setIsOpen(() => isOpen);
     }
+
     return (
         <>
             <Header isOpen={isOpen} menuButtonClicked={() => toggleDrawer(!isOpen)} />

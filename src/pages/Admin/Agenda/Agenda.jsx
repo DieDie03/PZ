@@ -1,53 +1,103 @@
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from '@fullcalendar/daygrid'
-import interactionPlugin from '@fullcalendar/interaction'
-import listPlugin from '@fullcalendar/list'
-import { useState, useEffect } from "react";
-import { Button } from "@mui/material";
-import axios from "axios";
+import { DatePicker } from "@mui/lab";
+import { Button, Dialog, TextField } from "@mui/material";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import * as yup from "yup";
+import './Agenda.scss';
+import { yupResolver } from '@hookform/resolvers/yup';
 import moment from "moment";
+import axios from "axios";
 
-export const Agenda = () => {
+const Agenda = () => 
+{
 
-    const [events, setEvents] = useState();
-
-    useEffect(() => {
-        axios.get('http://localhost:4000/events').then(result => setEvents(ev => [...result.data]));
-    }, []);
-
-    const update = e => {
-        const id = parseInt(e.event.id);
-        const toUpdate = events.find(ev => ev.id === id);
-        toUpdate.start = moment(e.event.start).format('YYYY-MM-DD') ;
-        toUpdate.end = moment(e.event.end).format('YYYY-MM-DD');
-        setEvents(e => e.map(ev => ev.id !== id ? ev : {...toUpdate}));
-        axios.put('http://localhost:4000/events/' + id, toUpdate).then(x => {
-
-        }).catch(() => {
-            e.revert();
+    yup.addMethod(yup.date, "notBeforeToday", function (errorMessage) {
+        return this.test(`notBeforeToday`, errorMessage, function (value) {
+          const { path, createError } = this;
+          console.log(value)
+          return (
+            (value && !moment(value).isBefore(moment().startOf('day'))) ||
+            createError({ path, message: errorMessage })
+          );
         });
-    }
+      });
 
-    const add = () => {
-        const newEv = { title: 'my event', start: '2021-11-10', end: '2021-11-20' };
-        axios.post('http://localhost:4000/events', newEv).then(result => {
-            setEvents(ev => [...ev, result]);
-        });
-    }
+    const validationSchema = yup.object({
+        name: yup.string().required("Le champ est requis"),
+        startDate: yup.date().notBeforeToday('Le champ doit etre sup à ajd')
+    });
+
+    const defaultValues = {
+        name: 'test',
+        startDate: moment(),
+        endDate: null
+    };
+
+
+    const [open, setOpen] = useState(false);
+
+    const { control, handleSubmit, formState: { errors } } = useForm({defaultValues, resolver : yupResolver(validationSchema)});
+
+    const onSubmit = data => axios.post('url/', data)
+
+    const onClick = () => {
+        setOpen(() => true);
+    };
+
+    const onClose = () => {
+        setOpen(() => false);
+    };
+
+
 
     return (
         <>
-            <Button onClick={add}>Add</Button>
-            <FullCalendar
-                plugins={[dayGridPlugin, listPlugin, interactionPlugin]}
-                initialView="dayGridMonth"
-                events={events}
-                droppable={true}
-                eventDurationEditable={true}
-                eventStartEditable={true}
-                eventResize={update}
-                eventDrop={update}
-            />
+            <Button variant="contained" onClick={() => onClick()}>+</Button>
+            <Dialog open={open}
+                    onClose={() => onClose()}>
+                <div className="card">
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="form-group">
+                        <Controller name="name"
+                                    control={control} 
+                                    render={({ field }) => <TextField {...field} 
+                                        label="Nom" 
+                                        error={!!errors.name}
+                                        helperText={!!errors.name && errors.name.message}></TextField>
+                        }>
+                        </Controller>
+                    </div>
+                    <div className="form-group">
+                        <Controller name="startDate"
+                                    control={control} 
+                                    render={({ field }) => <DatePicker {...field}
+                                        label="Start" 
+                                        onChange={date => field.onChange(date)}
+                                        inputFormat="DD/MM/YYYY"
+                                        renderInput={(params) => <TextField {...params} 
+                                            error={!!errors.startDate}
+                                            helperText={!!errors.startDate && errors.startDate.message}/>}
+                                    ></DatePicker>
+                        }>
+                        </Controller>
+                    </div>
+                    <div className="form-group">
+                        <Controller name="endDate" 
+                                    control={control} 
+                                    render={({ field }) => <DatePicker {...field}
+                                        label="End" 
+                                        onChange={date => field.onChange(date)}
+                                        renderInput={(params) => <TextField {...params} />}
+                                        inputFormat="DD/MM/YYYY"></DatePicker>
+                        }>
+                        </Controller>
+                    </div>
+                    <div className="form-group">
+                        <Button type="submit" variant="contained">Envoyer</Button>
+                    </div>
+                    </form>
+                </div>
+            </Dialog>
         </>
     );
 };

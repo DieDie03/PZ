@@ -6,7 +6,7 @@ import Nav from "../../containers/Nav/Nav";
 import { useAuth } from "../../hooks/login-hook";
 
 const Admin = () => {
-    useAuth();
+    //useAuth();
 
     const [isOpen, setIsOpen] = useState(false);
 

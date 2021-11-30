@@ -3,7 +3,6 @@ import './Home.scss';
 import { latLngGeom } from '../../../assets/border-belgium';
 import * as lbc from 'leaflet-boundary-canvas/src/BoundaryCanvas.js';
 import * as L from 'leaflet';
-import { useEffect, useState } from 'react';
 
 const Home = () => {
     const northEast = L.latLng([51.50, 6.42]);

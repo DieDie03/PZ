@@ -4,6 +4,7 @@
     top: $header-height!important;
 }
 
-main {
-    padding: 20px;
+.f-end {
+    display: flex;
+    justify-content: flex-end;
 }

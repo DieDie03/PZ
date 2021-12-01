@@ -3,6 +3,6 @@ import sessionReducer from './sessionSlice';
 
 export default configureStore({
   reducer: {
-      session: sessionReducer
+    session: sessionReducer
   },
 })

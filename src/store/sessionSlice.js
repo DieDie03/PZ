@@ -7,9 +7,9 @@ export const sessionSlice = createSlice({
         token: null,
     },
     reducers: {
-        start: (state, action) => {
+        start: (state, {payload}) =>  {
             state.isLogged = true;
-            state.token = action.payload;
+            state.token = payload;
         },
         end: (state) => {
             state.isLogged = false;

@@ -1,7 +1,9 @@
-import { Button } from "@mui/material";
+import { Button, Card, TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { sessionService } from "../../../services/sessionService";
 import { start } from "../../../store/sessionSlice";
+import './Login.scss';
 
 const Login = () => {
 
@@ -10,14 +12,32 @@ const Login = () => {
     const dispatch = useDispatch();
 
     const login = () => {
-        dispatch(start('test'));
-        navigate('/');
+        sessionService.login({ email: 'admin', password: 'admin' })
+            .then(token => {
+                dispatch(start(token));
+                navigate('/');
+            })
+            .catch(error => {
+
+            });
     }
 
     return (
-        <>
-            <Button onClick={ login } color="primary">Se connecter</Button>
-        </>
+        <main className="auth">
+            <Card variant="outlined">
+                <form onSubmit={ login }>  
+                    <div>
+                        <TextField type="email" label="Email" variant="outlined" />
+                    </div>
+                    <div>
+                        <TextField type="password" label="Mot de passe" variant="outlined" />
+                    </div>
+                    <div className="f-end">
+                        <Button type="submit" color="primary">Se connecter</Button>
+                    </div>
+                </form>            
+            </Card>
+        </main>
     );
 };
 

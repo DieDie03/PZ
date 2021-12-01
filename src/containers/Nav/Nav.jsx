@@ -33,7 +33,7 @@ const Nav = ({navLinkClicked}) => {
             { title: 'Sub 1', to: '/pageWithOutlet/sub1' },
             { title: 'Sub 2', to: '/pageWithOutlet/sub2' },
         ] },
-        { title: 'A propos', to: '/about' },
+        { title: 'Agenda', to: '/agenda' },
     ]);
 
     return (

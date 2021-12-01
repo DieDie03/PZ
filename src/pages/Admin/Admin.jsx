@@ -7,8 +7,7 @@ import { useAuth } from "../../hooks/auth-hook";
 import './Admin.scss';
 
 const Admin = () => {
-
-    useAuth();
+    //useAuth();
 
     const [isOpen, setIsOpen] = useState(false);
 
